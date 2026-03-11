@@ -5,29 +5,19 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>PYQERA - Premium Cover</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- Fonts and Icons (These work perfectly with PDF converters) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
-    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .ppt-slide {
-                @apply relative w-[794px] h-[1123px] mx-auto box-border overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)];
-            }
-            /* Tech Grid Background */
-            .bg-grid {
-                background-image: 
-                    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-                background-size: 40px 40px;
-            }
-        }
-    </style>
-
     <style>
+        /* Base Reset & Print Fixes */
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
         body {
             font-family: "Inter", sans-serif;
             background: #000000;
@@ -38,9 +28,174 @@
             margin: 0;
             padding: 20px;
         }
-        .tech-font { font-family: "Space Grotesk", sans-serif; }
+
+        /* Layout Structure */
+        .ppt-slide {
+            position: relative;
+            width: 794px;
+            height: 1123px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            display: flex;
+            background-color: #080812;
+        }
+
+        .col-left {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 64px;
+            padding-right: 40px;
+            background-color: #080812;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .col-right {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 32px 64px 32px 32px;
+            background-color: #0a0a14;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Background Effects */
+        .glow-purple {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background-color: rgba(147, 51, 234, 0.3);
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .glow-cyan {
+            position: absolute;
+            bottom: -10%;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(8, 145, 178, 0.2);
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Typography */
+        .content-wrapper { position: relative; z-index: 10; }
         
-        /* Premium Gradients */
+        .main-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 900;
+            margin-bottom: 16px;
+            margin-top: 0;
+            font-size: 72px;
+            line-height: 1;
+            letter-spacing: 6px;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(to right, #ffffff, #e2e8f0, #64748b);
+            filter: drop-shadow(0 10px 8px rgba(0,0,0,0.04)) drop-shadow(0 4px 3px rgba(0,0,0,0.1));
+        }
+
+        .divider {
+            width: 128px;
+            height: 6px;
+            margin-bottom: 24px;
+            border-radius: 9999px;
+            background-image: linear-gradient(to right, #00d4ff, #7c3aed, #f09433);
+            box-shadow: 0 0 15px rgba(124,58,237,0.5);
+        }
+
+        .subtitle {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-top: 0;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(to right, #00d4ff, #00f2fe);
+            letter-spacing: 0.025em;
+        }
+
+        .desc-text {
+            font-size: 16px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            margin-top: 0;
+            color: #94a3b8;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 32px;
+            transition: all 0.3s;
+        }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.05); }
+
+        .quote-card {
+            padding: 24px;
+            border-radius: 24px;
+            border-left: 4px solid #a855f7;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Author Section */
+        .author-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4ade80;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulse-dot-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-dot-anim { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        
+        .created-by { font-size: 12px; font-weight: 700; color: #94a3b8; letter-spacing: 0.2em; text-transform: uppercase; margin: 0; }
+        .author-name { font-family: "Space Grotesk", sans-serif; font-size: 32px; font-weight: 700; color: white; margin-bottom: 8px; margin-top: 0; }
+        .gradient-text-purple { color: transparent; background-clip: text; -webkit-background-clip: text; background-image: linear-gradient(to right, #00d4ff, #7c3aed); }
+        .author-tagline { font-size: 14px; font-weight: 300; font-style: italic; margin-bottom: 24px; margin-top: 0; color: #a5b4fc; }
+
+        /* Quote Section */
+        .quote-icon { font-size: 28px; color: #c084fc; opacity: 0.8; margin-bottom: 8px; display: block; }
+        .quote-text { font-size: 15px; font-weight: 300; line-height: 1.625; color: #cbd5e1; font-style: italic; margin: 0; }
+
+        /* Links List */
+        .links-wrapper { display: flex; flex-direction: column; gap: 12px; }
+
+        /* Gradients & Glows */
         .gradient-youtube { background: linear-gradient(135deg, #ff0000 0%, #b30000 100%); }
         .gradient-telegram { background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%); }
         .gradient-whatsapp { background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); }
@@ -50,17 +205,23 @@
         .gradient-x { background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%); border: 1px solid rgba(255,255,255,0.1); }
         .gradient-github { background: linear-gradient(135deg, #2b3137, #181c1f); border: 1px solid rgba(255,255,255,0.1); }
         .gradient-buymeacoffee { background: linear-gradient(135deg, #FFDD00, #FBB03B); color: #000 !important; }
-        
-        /* Custom Button Gradients */
         .gradient-about { background: linear-gradient(135deg, #00d4ff, #7c3aed); }
         .gradient-website { background: linear-gradient(135deg, #f09433, #dc2743); }
 
-        /* Neon & Glass Effects */
         .glow-effect { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
         .glow-strong { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
         .glow-website { box-shadow: 0 0 20px rgba(220, 39, 67, 0.4); }
-        
+
+        /* Buttons Structure */
         .social-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            border-radius: 16px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
             position: relative;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -71,9 +232,13 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 10;
         }
+        
+        .social-link .text-label { flex-grow: 1; font-size: 14px; }
+        
         .social-link .link-arrow {
             opacity: 0.3;
             margin-left: auto;
+            font-size: 20px;
             transition: all 0.3s ease;
         }
         .social-link:hover .link-arrow {
@@ -81,144 +246,153 @@
             transform: scale(1.2) rotate(5deg) translateX(2px) translateY(-2px);
         }
         
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            border-left: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        .social-link .icon-lg { font-size: 26px; }
+        .social-link .icon-md { font-size: 24px; }
+
+        /* Special Buttons */
+        .btn-about {
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .btn-about .inner-flex { display: flex; align-items: center; gap: 12px; }
+
+        .btn-website {
+            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: 700;
         }
 
-        /* Pulse animation */
+        .btn-coffee { margin-top: 4px; }
+        .btn-coffee .text-label { text-align: center; font-size: 15px; }
+
+        /* Animations */
         @keyframes subtle-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
-        .animate-subtle-pulse:hover {
-            animation: subtle-pulse 2s infinite;
-        }
+        .animate-subtle-pulse { animation: subtle-pulse 2s infinite; }
     </style>
 </head>
 <body>
 
-<div class="ppt-slide flex bg-[#080812]">
+<div class="ppt-slide">
     
-    <div class="w-1/2 flex flex-col justify-center pl-16 pr-10 bg-[#080812] relative shrink-0">
-        <div class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-[-10%] right-0 w-[300px] h-[300px] bg-cyan-600/20 rounded-full blur-[100px] pointer-events-none"></div>
-        
-        <div class="absolute inset-0 bg-grid opacity-50 pointer-events-none"></div>
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+        <!-- Background Shapes -->
+        <div class="glow-purple"></div>
+        <div class="glow-cyan"></div>
+        <div class="bg-grid"></div>
 
-        <div class="relative z-10">
-            <h1 class="tech-font font-black mb-4 text-[72px] leading-none tracking-[6px] text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-500 drop-shadow-lg">
-                PYQERA
-            </h1>
+        <div class="content-wrapper">
+            <h1 class="main-title">PYQERA</h1>
             
-            <div class="w-32 h-[6px] mb-6 rounded-full bg-gradient-to-r from-[#00d4ff] via-[#7c3aed] to-[#f09433] shadow-[0_0_15px_rgba(124,58,237,0.5)]"></div>
+            <div class="divider"></div>
             
-            <p class="text-[22px] font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#00f2fe] tracking-wide">
-                Previous Year Questions & Notes
-            </p>
+            <p class="subtitle">Previous Year Questions & Notes</p>
             
-            <p class="text-base font-light mb-10 text-slate-400">
-                PYQ Notes & Study Materials
-            </p>
+            <p class="desc-text">PYQ Notes & Study Materials</p>
             
-            <div class="mb-8 p-7 rounded-3xl glass-card transition-all duration-300 hover:bg-white/5">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_#4ade80] animate-pulse"></div>
-                    <p class="text-xs font-bold text-slate-400 tracking-[0.2em] uppercase">Created By</p>
+            <div class="glass-card">
+                <div class="author-top">
+                    <div class="pulse-dot"></div>
+                    <p class="created-by">Created By</p>
                 </div>
                 
-                <p class="tech-font text-[32px] font-bold text-white mb-2">
-                    ARYAN <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7c3aed]"> [𝖑𝖔𝖈𝖆𝖑𝖍𝖔𝖘𝖙]</span>
+                <p class="author-name">
+                    ARYAN <span class="gradient-text-purple"> [𝖑𝖔𝖈𝖆𝖑𝖍𝖔𝖘𝖙]</span>
                 </p>
                 
-                <p class="text-sm font-light italic mb-6 text-indigo-300">
+                <p class="author-tagline">
                     ✨ Creating a universe where 'Error 404' doesn't exist. 💻
                 </p>
 
-                <a href="https://onlyaryan.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-about glow-strong flex items-center justify-between px-5 py-3.5 rounded-xl text-white font-bold text-base border border-white/20 animate-subtle-pulse w-full">
-                    <div class="flex items-center gap-3">
-                        <i class="material-icons text-2xl">person_outline</i>
+                <a href="https://onlyaryan.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link btn-about gradient-about glow-strong animate-subtle-pulse">
+                    <div class="inner-flex">
+                        <i class="material-icons icon-md">person_outline</i>
                         <span>Discover More About Me</span>
                     </div>
-                    <i class="material-icons link-arrow text-[20px]">arrow_forward</i>
+                    <i class="material-icons link-arrow">arrow_forward</i>
                 </a>
             </div>
             
-            <div class="p-6 rounded-3xl glass-card border-l-4 border-l-purple-500">
-                <i class="material-icons mb-2 text-[28px] text-purple-400 opacity-80">format_quote</i>
-                <p class="text-[15px] font-light leading-relaxed text-slate-300 italic">
+            <div class="quote-card">
+                <i class="material-icons quote-icon">format_quote</i>
+                <p class="quote-text">
                     "Innovation distinguishes between a leader and a follower. The future belongs to those who believe in the beauty of their dreams."
                 </p>
             </div>
         </div>
     </div>
 
-    <div class="w-1/2 flex flex-col justify-center py-8 pr-16 pl-8 bg-[#0a0a14] border-l border-white/5 relative z-10">
-        <div class="space-y-3">
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+        <div class="links-wrapper">
             
-            <a href="https://www.youtube.com/@InMyFeellings" target="_blank" rel="noopener noreferrer" class="social-link gradient-youtube glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-youtube text-[26px]"></i>
-                <span class="text-sm flex-grow">Subscribe to My YouTube Channel</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://www.youtube.com/@InMyFeellings" target="_blank" rel="noopener noreferrer" class="social-link gradient-youtube glow-effect">
+                <i class="fa-brands fa-youtube icon-lg"></i>
+                <span class="text-label">Subscribe to My YouTube Channel</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://t.me/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-telegram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-telegram text-[26px]"></i>
-                <span class="text-sm flex-grow">Join My Telegram Family</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://t.me/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-telegram glow-effect">
+                <i class="fa-brands fa-telegram icon-lg"></i>
+                <span class="text-label">Join My Telegram Family</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://whatsapp.com/channel/0029VbAYK3T11ulJTKOhx53G" target="_blank" rel="noopener noreferrer" class="social-link gradient-whatsapp glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-whatsapp text-[26px]"></i>
-                <span class="text-sm flex-grow">Follow me on WhatsApp for updates.</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://whatsapp.com/channel/0029VbAYK3T11ulJTKOhx53G" target="_blank" rel="noopener noreferrer" class="social-link gradient-whatsapp glow-effect">
+                <i class="fa-brands fa-whatsapp icon-lg"></i>
+                <span class="text-label">Follow me on WhatsApp for updates.</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://www.instagram.com/pyqera?igsh=cnA2Z2t3cXlwaXFo" target="_blank" rel="noopener noreferrer" class="social-link gradient-instagram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-instagram text-[26px]"></i>
-                <span class="text-sm flex-grow">Follow on Instagram</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://www.instagram.com/pyqera?igsh=cnA2Z2t3cXlwaXFo" target="_blank" rel="noopener noreferrer" class="social-link gradient-instagram glow-effect">
+                <i class="fa-brands fa-instagram icon-lg"></i>
+                <span class="text-label">Follow on Instagram</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://discord.gg/at46xXhUw" target="_blank" rel="noopener noreferrer" class="social-link gradient-discord glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-discord text-[24px]"></i>
-                <span class="text-sm flex-grow">Join Discord Community</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://discord.gg/at46xXhUw" target="_blank" rel="noopener noreferrer" class="social-link gradient-discord glow-effect">
+                <i class="fa-brands fa-discord icon-md"></i>
+                <span class="text-label">Join Discord Community</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://www.facebook.com/groups/1278899844307654/?ref=share&mibextid=NSMWBT" target="_blank" rel="noopener noreferrer" class="social-link gradient-facebook glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-facebook text-[26px]"></i>
-                <span class="text-sm flex-grow">Connect on Facebook</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://www.facebook.com/groups/1278899844307654/?ref=share&mibextid=NSMWBT" target="_blank" rel="noopener noreferrer" class="social-link gradient-facebook glow-effect">
+                <i class="fa-brands fa-facebook icon-lg"></i>
+                <span class="text-label">Connect on Facebook</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://x.com/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-x glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-x-twitter text-[24px]"></i>
-                <span class="text-sm flex-grow">Follow on X (Twitter)</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://x.com/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-x glow-effect">
+                <i class="fa-brands fa-x-twitter icon-md"></i>
+                <span class="text-label">Follow on X (Twitter)</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
 
-            <a href="https://pyqera.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-website glow-website flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-bold border border-white/20 animate-subtle-pulse">
-                <i class="material-icons text-[26px]">language</i>
-                <span class="text-sm flex-grow">Visit PYQERA Website</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://pyqera.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link btn-website gradient-website glow-website animate-subtle-pulse">
+                <i class="material-icons icon-lg">language</i>
+                <span class="text-label">Visit PYQERA Website</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
-            <a href="https://github.com/Aryan0127" target="_blank" rel="noopener noreferrer" class="social-link gradient-github glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-github text-[24px]"></i>
-                <span class="text-sm flex-grow">Follow me on GitHub</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://github.com/Aryan0127" target="_blank" rel="noopener noreferrer" class="social-link gradient-github glow-effect">
+                <i class="fa-brands fa-github icon-md"></i>
+                <span class="text-label">Follow me on GitHub</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
 
-            <a href="https://justpaste.it/kbf03" target="_blank" rel="noopener noreferrer" class="social-link gradient-buymeacoffee glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl font-bold text-black mt-1">
-                <i class="fa-solid fa-mug-hot text-[24px]"></i>
-                <span class="text-[15px] flex-grow text-center">Buy Me a Coffee</span>
-                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            <a href="https://justpaste.it/kbf03" target="_blank" rel="noopener noreferrer" class="social-link btn-coffee gradient-buymeacoffee glow-effect">
+                <i class="fa-solid fa-mug-hot icon-md"></i>
+                <span class="text-label">Buy Me a Coffee</span>
+                <i class="material-icons link-arrow">arrow_outward</i>
             </a>
             
         </div>
