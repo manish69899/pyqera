@@ -47,20 +47,18 @@
         .gradient-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
         .gradient-discord { background: linear-gradient(135deg, #5865F2, #4752C4); }
         .gradient-facebook { background: linear-gradient(135deg, #1877F2, #0d5cbe); }
-        /* X (Twitter) Dark Gradient */
         .gradient-x { background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%); border: 1px solid rgba(255,255,255,0.1); }
-        .gradient-slack { background: linear-gradient(135deg, #4A154B, #330d34); }
         .gradient-github { background: linear-gradient(135deg, #2b3137, #181c1f); border: 1px solid rgba(255,255,255,0.1); }
-        .gradient-gitlab { background: linear-gradient(135deg, #FC6D26, #E24329); }
-        .gradient-linkedin { background: linear-gradient(135deg, #0A66C2, #004182); }
         .gradient-buymeacoffee { background: linear-gradient(135deg, #FFDD00, #FBB03B); color: #000 !important; }
-        .gradient-kofi { background: linear-gradient(135deg, #FF5E5B, #e34442); }
-        .gradient-medium { background: linear-gradient(135deg, #000000, #222222); border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Custom Button Gradients */
         .gradient-about { background: linear-gradient(135deg, #00d4ff, #7c3aed); }
+        .gradient-website { background: linear-gradient(135deg, #f09433, #dc2743); }
 
         /* Neon & Glass Effects */
         .glow-effect { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
         .glow-strong { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+        .glow-website { box-shadow: 0 0 20px rgba(220, 39, 67, 0.4); }
         
         .social-link {
             position: relative;
@@ -82,6 +80,7 @@
             opacity: 1;
             transform: scale(1.2) rotate(5deg) translateX(2px) translateY(-2px);
         }
+        
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -89,6 +88,16 @@
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             border-left: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Pulse animation */
+        @keyframes subtle-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .animate-subtle-pulse:hover {
+            animation: subtle-pulse 2s infinite;
         }
     </style>
 </head>
@@ -113,7 +122,7 @@
                 Previous Year Questions & Notes
             </p>
             
-            <p class="text-base font-light mb-12 text-slate-400">
+            <p class="text-base font-light mb-10 text-slate-400">
                 PYQ Notes & Study Materials
             </p>
             
@@ -130,10 +139,13 @@
                 <p class="text-sm font-light italic mb-6 text-indigo-300">
                     ✨ Creating a universe where 'Error 404' doesn't exist. 💻
                 </p>
-                
-                <a href="#" class="gradient-about glow-strong flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl text-white font-bold text-base transition-transform hover:scale-105 w-full border border-white/20">
-                    <i class="material-icons text-2xl">person_outline</i>
-                    <span>Discover More About Me</span>
+
+                <a href="https://onlyaryan.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-about glow-strong flex items-center justify-between px-5 py-3.5 rounded-xl text-white font-bold text-base border border-white/20 animate-subtle-pulse w-full">
+                    <div class="flex items-center gap-3">
+                        <i class="material-icons text-2xl">person_outline</i>
+                        <span>Discover More About Me</span>
+                    </div>
+                    <i class="material-icons link-arrow text-[20px]">arrow_forward</i>
                 </a>
             </div>
             
@@ -149,91 +161,65 @@
     <div class="w-1/2 flex flex-col justify-center py-8 pr-16 pl-8 bg-[#0a0a14] border-l border-white/5 relative z-10">
         <div class="space-y-3">
             
-            <a href="https://www.youtube.com/@InMyFeellings" class="social-link gradient-youtube glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://www.youtube.com/@InMyFeellings" target="_blank" rel="noopener noreferrer" class="social-link gradient-youtube glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-youtube text-[26px]"></i>
                 <span class="text-sm flex-grow">Subscribe to My YouTube Channel</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="t.me/pyqera" class="social-link gradient-telegram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://t.me/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-telegram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-telegram text-[26px]"></i>
                 <span class="text-sm flex-grow">Join My Telegram Family</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="#" class="social-link gradient-whatsapp glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://whatsapp.com/channel/0029VbAYK3T11ulJTKOhx53G" target="_blank" rel="noopener noreferrer" class="social-link gradient-whatsapp glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-whatsapp text-[26px]"></i>
-                <span class="text-sm flex-grow">Connect on WhatsApp</span>
+                <span class="text-sm flex-grow">Follow me on WhatsApp for updates.</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="#" class="social-link gradient-instagram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://www.instagram.com/pyqera?igsh=cnA2Z2t3cXlwaXFo" target="_blank" rel="noopener noreferrer" class="social-link gradient-instagram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-instagram text-[26px]"></i>
                 <span class="text-sm flex-grow">Follow on Instagram</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="#" class="social-link gradient-discord glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://discord.gg/at46xXhUw" target="_blank" rel="noopener noreferrer" class="social-link gradient-discord glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-discord text-[24px]"></i>
                 <span class="text-sm flex-grow">Join Discord Community</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="#" class="social-link gradient-facebook glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://www.facebook.com/groups/1278899844307654/?ref=share&mibextid=NSMWBT" target="_blank" rel="noopener noreferrer" class="social-link gradient-facebook glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-facebook text-[26px]"></i>
                 <span class="text-sm flex-grow">Connect on Facebook</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <a href="#" class="social-link gradient-x glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+            <a href="https://x.com/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-x glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
                 <i class="fa-brands fa-x-twitter text-[24px]"></i>
                 <span class="text-sm flex-grow">Follow on X (Twitter)</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
-            
-            <a href="#" class="social-link gradient-slack glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
-                <i class="fa-brands fa-slack text-[24px]"></i>
-                <span class="text-sm flex-grow">Join My Slack Workspace</span>
+
+            <a href="https://pyqera.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-website glow-website flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-bold border border-white/20 animate-subtle-pulse">
+                <i class="material-icons text-[26px]">language</i>
+                <span class="text-sm flex-grow">Visit PYQERA Website</span>
                 <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
             </a>
             
-            <div class="grid grid-cols-2 gap-3 mt-3">
-                <a href="#" class="social-link gradient-github glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl text-white font-medium">
-                    <i class="fa-brands fa-github text-[20px]"></i>
-                    <span class="text-[13px] flex-grow">GitHub</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-                
-                <a href="#" class="social-link gradient-gitlab glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl text-white font-medium">
-                    <i class="fa-brands fa-gitlab text-[20px]"></i>
-                    <span class="text-[13px] flex-grow">GitLab</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-                
-                <a href="#" class="social-link gradient-linkedin glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl text-white font-medium">
-                    <i class="fa-brands fa-linkedin text-[20px]"></i>
-                    <span class="text-[13px] flex-grow">LinkedIn</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-                
-                <a href="#" class="social-link gradient-buymeacoffee glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-black">
-                    <i class="fa-solid fa-mug-hot text-[18px]"></i>
-                    <span class="text-[11px] flex-grow">Buy Me a Coffee</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-                
-                <a href="#" class="social-link gradient-medium glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl text-white font-medium">
-                    <i class="fa-brands fa-medium text-[20px]"></i>
-                    <span class="text-[13px] flex-grow">Medium</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-                
-                <a href="#" class="social-link gradient-kofi glow-effect flex items-center gap-3 px-4 py-2.5 rounded-xl text-white font-medium">
-                    <i class="fa-solid fa-heart border-white text-[18px]"></i>
-                    <span class="text-[13px] flex-grow">Ko-fi</span>
-                    <i class="material-icons link-arrow text-[18px]">arrow_outward</i>
-                </a>
-            </div>
+            <a href="https://github.com/Aryan0127" target="_blank" rel="noopener noreferrer" class="social-link gradient-github glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-github text-[24px]"></i>
+                <span class="text-sm flex-grow">Follow me on GitHub</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+
+            <a href="https://justpaste.it/kbf03" target="_blank" rel="noopener noreferrer" class="social-link gradient-buymeacoffee glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl font-bold text-black mt-1">
+                <i class="fa-solid fa-mug-hot text-[24px]"></i>
+                <span class="text-[15px] flex-grow text-center">Buy Me a Coffee</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
             
         </div>
     </div>
