@@ -1,698 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pyqera | Get PYQs on Telegram</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050508;
-            --bg-elevated: #0c0c12;
-            --fg: #f4f4f6;
-            --muted: #71717a;
-            --accent: #00e5bf;
-            --accent-secondary: #6366f1;
-            --accent-dim: rgba(0, 229, 191, 0.12);
-            --border: #18181f;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg);
-            color: var(--fg);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Animated Background */
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(0, 229, 191, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 229, 191, 0.015) 1px, transparent 1px);
-            background-size: 40px 40px;
-            mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 10%, transparent 70%);
-        }
-
-        /* Glowing Orbs */
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            pointer-events: none;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 229, 191, 0.2) 0%, transparent 70%);
-            top: -200px;
-            right: -200px;
-            animation: floatOrb1 30s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            bottom: -150px;
-            left: -150px;
-            animation: floatOrb2 35s ease-in-out infinite;
-        }
-
-        @keyframes floatOrb1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-100px, 80px) scale(1.1); }
-            66% { transform: translate(50px, -60px) scale(0.95); }
-        }
-
-        @keyframes floatOrb2 {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(80px, -70px) scale(1.1); }
-        }
-
-        /* Noise Texture */
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Particle Canvas */
-        #particleCanvas {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* Content */
-        .main-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Hero Badge */
-        .dev-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 12px;
-            color: #a5b4fc;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-        }
-
-        /* Logo */
-        .logo-wrap {
-            position: relative;
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .logo-pulse {
-            position: absolute;
-            inset: 0;
-            border: 1.5px solid var(--accent);
-            border-radius: 50%;
-            animation: logoPulse 3s ease-out infinite;
-        }
-
-        .logo-pulse:nth-child(2) { animation-delay: 1s; }
-        .logo-pulse:nth-child(3) { animation-delay: 2s; }
-
-        @keyframes logoPulse {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-
-        .logo-core {
-            position: absolute;
-            inset: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 50px rgba(0, 229, 191, 0.4);
-        }
-
-        /* Title */
-        .main-title {
-            font-size: clamp(2.8rem, 10vw, 5rem);
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            line-height: 1;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 80%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Telegram CTA Card */
-        .telegram-card {
-            background: linear-gradient(145deg, rgba(0, 229, 191, 0.08), rgba(99, 102, 241, 0.05));
-            border: 1px solid rgba(0, 229, 191, 0.25);
-            border-radius: 24px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .telegram-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(0, 229, 191, 0.05), transparent);
-            pointer-events: none;
-        }
-
-        /* CTA Button */
-        .cta-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, var(--accent), #00c9a7);
-            color: #050508;
-            padding: 18px 36px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 24px rgba(0, 229, 191, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 40px rgba(0, 229, 191, 0.4);
-        }
-
-        .cta-btn:hover::before {
-            opacity: 1;
-        }
-
-        .cta-btn:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        /* Feature Pills */
-        .feature-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 8px 14px;
-            border-radius: 100px;
-            font-size: 13px;
-            color: var(--muted);
-            transition: all 0.3s ease;
-        }
-
-        .feature-pill:hover {
-            border-color: var(--accent);
-            color: var(--fg);
-            background: var(--accent-dim);
-        }
-
-        /* Info Card */
-        .info-card {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .info-card:hover {
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Admin Card */
-        .admin-card {
-            background: linear-gradient(145deg, rgba(251, 191, 36, 0.05), rgba(251, 191, 36, 0.02));
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem;
-        }
-
-        .admin-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(251, 191, 36, 0.15);
-            padding: 4px 10px;
-            border-radius: 100px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fbbf24;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Contact Links */
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--fg);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .contact-link:hover {
-            border-color: var(--accent);
-            background: var(--accent-dim);
-            transform: translateX(4px);
-        }
-
-        /* Progress */
-        .progress-bar {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 100px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-            border-radius: 100px;
-            width: 0%;
-            animation: fillProgress 2s ease-out 0.5s forwards;
-        }
-
-        @keyframes fillProgress {
-            to { width: 55%; }
-        }
-
-        /* Animations */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(25px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Arrow Animation */
-        .arrow-bounce {
-            animation: arrowBounce 1.5s ease-in-out infinite;
-        }
-
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(6px); }
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .telegram-card {
-                padding: 1.5rem;
-            }
-            .cta-btn {
-                padding: 16px 28px;
-                font-size: 15px;
-            }
-        }
-
-        /* Focus States */
-        .cta-btn:focus-visible,
-        .contact-link:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-        }
-
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PYQERA - PDF Cover</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<style type="text/tailwindcss">
+@layer utilities {
+.ppt-slide {
+@apply relative w-[794px] h-[1123px] mx-auto box-border
+}
+}
+</style>
+<style>body {
+    font-family: "Inter", sans-serif;
+    background: #0a0a0a
+    }
+.tech-font {
+    font-family: "Space Grotesk", sans-serif
+    }
+.gradient-youtube {
+    background: linear-gradient(135deg, #FF0000, #CC0000)
+    }
+.gradient-telegram {
+    background: linear-gradient(135deg, #0088cc, #0077b5)
+    }
+.gradient-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E)
+    }
+.gradient-instagram {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)
+    }
+.gradient-discord {
+    background: linear-gradient(135deg, #5865F2, #4752C4)
+    }
+.gradient-facebook {
+    background: linear-gradient(135deg, #1877F2, #0e5ec9)
+    }
+.gradient-twitter {
+    background: linear-gradient(135deg, #1DA1F2, #0d8bd9)
+    }
+.gradient-slack {
+    background: linear-gradient(135deg, #4A154B, #611f69)
+    }
+.gradient-github {
+    background: linear-gradient(135deg, #333, #24292e)
+    }
+.gradient-gitlab {
+    background: linear-gradient(135deg, #FC6D26, #E24329)
+    }
+.gradient-linkedin {
+    background: linear-gradient(135deg, #0077B5, #006097)
+    }
+.gradient-buymeacoffee {
+    background: linear-gradient(135deg, #FF813F, #FF6E41)
+    }
+.gradient-kofi {
+    background: linear-gradient(135deg, #FF5E5B, #FF6B6B)
+    }
+.gradient-medium {
+    background: linear-gradient(135deg, #00ab6c, #008f5b)
+    }
+.gradient-about {
+    background: linear-gradient(135deg, #00d4ff, #7c3aed)
+    }
+.glow-effect {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3)
+    }
+.glow-strong {
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3)
+    }
+.social-link {
+    position: relative;
+    cursor: pointer
+    }
+.social-link .link-arrow {
+    opacity: 0.6;
+    margin-left: auto;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.95)
+    }
+.social-link:hover .link-arrow {
+    opacity: 1;
+    transform: scale(1.15)
+    }
+.social-link .social-icon {
+    color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))
+    }</style>
+<style>.material-icons {
+    width: 1em
+    }</style><style>.material-icons {
+    direction: rtl
+    }</style></head>
 <body>
-    <!-- Background -->
-    <div class="bg-grid"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="noise-overlay"></div>
-    <canvas id="particleCanvas"></canvas>
+<div class="ppt-slide flex" style="background: #0f0f23">
+<div class="w-1/2 flex flex-col justify-center pl-16 pr-10" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); flex-shrink: 0">
+<h1 class="tech-font font-black text-white mb-4" style="font-size: 68px;
+line-height: 1;
+letter-spacing: 4px">
+PYQERA
+</h1>
+<div class="w-32 h-2 mb-5" style="background: linear-gradient(90deg, #00d4ff, #7c3aed, #f09433)"></div>
+<p class="text-xl font-semibold mb-3" style="color: #00d4ff;
+letter-spacing: 1px">
+Previous Year Questions & Notes
+</p>
+<p class="text-base font-light mb-10" style="color: #718096">
+PYQ Notes & Study Materials
+</p>
+<div class="mb-8 p-5 rounded-xl" style="background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.1)">
+<p class="text-sm font-medium mb-2" style="color: #00d4ff">CREATED BY</p>
+<p class="tech-font text-3xl font-bold text-white mb-2">ARYAN [𝖑𝖔𝖈𝖆𝖑𝖍𝖔𝖘𝖙] </p>
+<p class="text-sm font-light italic mb-3" style="color: #a78bfa">
+✨ Creating a universe where 'Error 404' doesn't exist. 💻
+</p>
+<a href="#" class="gradient-about glow-strong flex items-center gap-3 px-5 py-3 rounded-lg text-white font-semibold text-base transition-transform hover:scale-105 inline-block w-full">
+<i class="material-icons" style="font-size: 24px">open_in_new</i>
+<span>About Me</span>
+</a>
+</div>
+<div class="p-5 rounded-xl" style="background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.08)">
+<i class="material-icons mb-3" style="font-size: 28px;
+color: #7c3aed">format_quote</i>
+<p class="text-sm font-light leading-relaxed" style="color: #cbd5e0;
+font-style: italic">
+"Innovation distinguishes between a leader and a follower. The future belongs to those who believe in the beauty of their dreams."
+</p>
 
-    <!-- Main Content -->
-    <main class="main-content min-h-screen px-4 py-10 md:py-16">
-        <div class="max-w-4xl mx-auto">
-            
-            <!-- Hero Section -->
-            <section class="text-center mb-12">
-                <div class="logo-wrap fade-up">
-                    <div class="logo-pulse"></div>
-                    <div class="logo-pulse"></div>
-                    <div class="logo-pulse"></div>
-                    <div class="logo-core">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="dev-badge fade-up mb-6" style="transition-delay: 0.1s;">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                    </svg>
-                    <span>Under Development</span>
-                </div>
-
-                <h1 class="main-title fade-up mb-4" style="transition-delay: 0.15s;">Pyqera</h1>
-                <p class="text-lg md:text-xl text-zinc-400 max-w-lg mx-auto fade-up" style="transition-delay: 0.2s;">
-                    Your go-to platform for Previous Year Questions and Study Materials
-                </p>
-
-                <div class="max-w-xs mx-auto mt-6 fade-up" style="transition-delay: 0.25s;">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                    <p class="text-xs text-zinc-500 mt-2 font-mono">Building something great... 55%</p>
-                </div>
-            </section>
-
-            <!-- Main Telegram CTA -->
-            <section class="telegram-card mb-10 fade-up" style="transition-delay: 0.3s;">
-                <div class="text-center mb-6">
-                    <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-5">
-                        <svg class="w-5 h-5 text-[#00e5bf]" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                        </svg>
-                        <span class="text-sm font-medium">Telegram Channel Active</span>
-                    </div>
-                    
-                    <h2 class="text-2xl md:text-3xl font-bold mb-3">
-                        Get Your PYQs Right Now
-                    </h2>
-                    <p class="text-zinc-400 max-w-md mx-auto leading-relaxed">
-                        While we build the website, all Previous Year Questions and study materials are being uploaded on our Telegram channel. Join now and start studying.
-                    </p>
-                </div>
-
-                <!-- Feature Pills -->
-                <div class="flex flex-wrap justify-center gap-3 mb-8">
-                    <div class="feature-pill">
-                        <svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span>Free PYQs</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span>Study Notes</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                        <span>Instant Updates</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                        <span>Community</span>
-                    </div>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="text-center">
-                    <a href="https://t.me/YOUR_CHANNEL_NAME" target="_blank" rel="noopener noreferrer" class="cta-btn">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                        </svg>
-                        <span>Join Telegram Channel</span>
-                        <svg class="w-4 h-4 arrow-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                    <p class="text-xs text-zinc-500 mt-4 font-mono">Click to join — it's free</p>
-                </div>
-            </section>
-
-            <!-- Info Cards -->
-            <section class="grid md:grid-cols-2 gap-5 mb-10">
-                <div class="info-card fade-up" style="transition-delay: 0.35s;">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold">Why The Wait?</h3>
-                    </div>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        Building a quality platform takes time. We're working hard to give you the best experience possible. Meanwhile, grab all PYQs from Telegram.
-                    </p>
-                </div>
-
-                <div class="info-card fade-up" style="transition-delay: 0.4s;">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500/20 to-violet-500/5 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold">What's Coming?</h3>
-                    </div>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        A clean, organized website with all PYQs, notes, and study materials at your fingertips. No more searching everywhere.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Admin Help Card -->
-            <section class="admin-card fade-up mb-8" style="transition-delay: 0.45s;">
-                <div class="flex items-start gap-4">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="admin-badge">
-                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                </svg>
-                                Admin
-                            </span>
-                            <span class="font-semibold">Aryan</span>
-                        </div>
-                        <p class="text-sm text-zinc-300 mb-4 leading-relaxed">
-                            I'm building this alone and could use some help. If you know basic HTML and CSS, reach out. Let's build something cool together.
-                        </p>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="https://t.me/YOUR_TELEGRAM_USERNAME" target="_blank" rel="noopener noreferrer" class="contact-link">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                </svg>
-                                <span>Telegram</span>
-                            </a>
-                            <a href="mailto:YOUR_EMAIL@gmail.com" class="contact-link">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                                <span>Email</span>
-                            </a>
-                            <a href="https://instagram.com/YOUR_INSTAGRAM" target="_blank" rel="noopener noreferrer" class="contact-link">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                </svg>
-                                <span>Instagram</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="text-center fade-up" style="transition-delay: 0.5s;">
-                <p class="text-zinc-500 text-sm mb-2">
-                    Site launching soon. Stay tuned!
-                </p>
-                <p class="text-zinc-600 text-xs font-mono">
-                    Pyqera — Made with effort
-                </p>
-            </footer>
-        </div>
-    </main>
-
-    <script>
-        // ===== Initialize Variables =====
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouseX = 0;
-        let mouseY = 0;
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        // ===== Canvas Setup =====
-        function setupCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        // ===== Create Particle =====
-        function createParticle() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.max(0.5, Math.random() * 1.8),
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                alpha: Math.random() * 0.35 + 0.1
-            };
-        }
-
-        // ===== Initialize Particles =====
-        function initParticles() {
-            particles = [];
-            const count = Math.min(50, Math.floor((canvas.width * canvas.height) / 25000));
-            for (let i = 0; i < count; i++) {
-                particles.push(createParticle());
-            }
-        }
-
-        // ===== Animate =====
-        function animate() {
-            if (prefersReducedMotion) return;
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // Mouse repel
-                const dx = mouseX - p.x;
-                const dy = mouseY - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist < 100 && dist > 0) {
-                    p.x -= (dx / dist) * 0.8;
-                    p.y -= (dy / dist) * 0.8;
-                }
-
-                // Wrap
-                if (p.x < 0) p.x = canvas.width;
-                if (p.x > canvas.width) p.x = 0;
-                if (p.y < 0) p.y = canvas.height;
-                if (p.y > canvas.height) p.y = 0;
-
-                // Draw
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, Math.max(0.3, p.radius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 229, 191, ${p.alpha})`;
-                ctx.fill();
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        // ===== Scroll Animations =====
-        function initScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-        }
-
-        // ===== Orb Parallax =====
-        function initParallax() {
-            if (prefersReducedMotion) return;
-            
-            document.addEventListener('mousemove', (e) => {
-                const x = (e.clientX / window.innerWidth - 0.5) * 50;
-                const y = (e.clientY / window.innerHeight - 0.5) * 50;
-
-                document.querySelectorAll('.orb').forEach((orb, i) => {
-                    const factor = i === 0 ? 1 : -0.7;
-                    orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
-                });
-            });
-        }
-
-        // ===== Init =====
-        function init() {
-            setupCanvas();
-            initParticles();
-            
-            if (!prefersReducedMotion) {
-                animate();
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
-            }
-            
-            initParallax();
-            initScrollAnimations();
-        }
-
-        window.addEventListener('resize', () => {
-            setupCanvas();
-            initParticles();
-        });
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    </script>
+</div>
+</div>
+<div class="w-1/2 flex flex-col justify-center py-10 pr-16 pl-8" style="background: #0a0a1a">
+<div class="space-y-2">
+<a href="#" class="social-link gradient-youtube glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">play_circle</i>
+<span class="text-sm flex-grow">Subscribe to My YouTube Channel</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-telegram glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">send</i>
+<span class="text-sm flex-grow">Join My Telegram Family</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-whatsapp glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">chat</i>
+<span class="text-sm flex-grow">Connect on WhatsApp</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-instagram glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">photo_camera</i>
+<span class="text-sm flex-grow">Follow on Instagram</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-discord glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">forum</i>
+<span class="text-sm flex-grow">Join Discord Community</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-facebook glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">facebook</i>
+<span class="text-sm flex-grow">Connect on Facebook</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-twitter glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">tag</i>
+<span class="text-sm flex-grow">Follow on Twitter</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-slack glow-effect flex items-center gap-3 px-4 py-2.5 rounded-lg text-white font-semibold transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 26px">message</i>
+<span class="text-sm flex-grow">Join My Slack Workspace</span>
+<i class="material-icons link-arrow" style="font-size: 18px">open_in_new</i>
+</a>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<a href="#" class="social-link gradient-github glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">code</i>
+<span class="text-xs flex-grow">GitHub</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-gitlab glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">storage</i>
+<span class="text-xs flex-grow">GitLab</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-linkedin glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">work</i>
+<span class="text-xs flex-grow">LinkedIn</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-buymeacoffee glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">local_cafe</i>
+<span class="text-xs flex-grow">Buy Me a Coffee</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-medium glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">article</i>
+<span class="text-xs flex-grow">Medium</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+<a href="#" class="social-link gradient-kofi glow-effect flex items-center gap-2 px-3 py-2 rounded-lg text-white font-medium transition-transform hover:scale-105">
+<i class="material-icons social-icon" style="font-size: 22px">favorite</i>
+<span class="text-xs flex-grow">Ko-fi</span>
+<i class="material-icons link-arrow" style="font-size: 16px">open_in_new</i>
+</a>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
