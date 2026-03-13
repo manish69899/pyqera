@@ -1,709 +1,238 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pyqera | Get PYQs on Telegram</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PYQERA - Premium Cover</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .ppt-slide {
+                @apply relative w-[794px] h-[1123px] mx-auto box-border overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)];
+            }
+            /* Tech Grid Background */
+            .bg-grid {
+                background-image: 
+                    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+                background-size: 40px 40px;
+            }
+        }
+    </style>
+
     <style>
-        :root {
-            --bg: #050508;
-            --bg-elevated: #0c0c12;
-            --fg: #f4f4f6;
-            --muted: #a1a1aa;
-            --accent: #00e5bf;
-            --accent-secondary: #6366f1;
-            --accent-dim: rgba(0, 229, 191, 0.12);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg);
-            color: var(--fg);
+            font-family: "Inter", sans-serif;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            /* Custom Scrollbar */
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--bg);
+            margin: 0;
+            padding: 20px;
         }
+        .tech-font { font-family: "Space Grotesk", sans-serif; }
+        
+        /* Premium Gradients */
+        .gradient-youtube { background: linear-gradient(135deg, #ff0000 0%, #b30000 100%); }
+        .gradient-telegram { background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%); }
+        .gradient-whatsapp { background: linear-gradient(135deg, #25D366 0%, #1DA851 100%); }
+        .gradient-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+        .gradient-discord { background: linear-gradient(135deg, #5865F2, #4752C4); }
+        .gradient-facebook { background: linear-gradient(135deg, #1877F2, #0d5cbe); }
+        .gradient-x { background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%); border: 1px solid rgba(255,255,255,0.1); }
+        .gradient-github { background: linear-gradient(135deg, #2b3137, #181c1f); border: 1px solid rgba(255,255,255,0.1); }
+        .gradient-buymeacoffee { background: linear-gradient(135deg, #FFDD00, #FBB03B); color: #000 !important; }
+        
+        /* Custom Button Gradients */
+        .gradient-about { background: linear-gradient(135deg, #00d4ff, #7c3aed); }
+        .gradient-website { background: linear-gradient(135deg, #f09433, #dc2743); }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-secondary);
-            border-radius: 10px;
-        }
-
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Animated Background & Orbs */
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(0, 229, 191, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 229, 191, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 10%, transparent 70%);
-            z-index: 0;
-        }
-
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(150px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 229, 191, 0.15) 0%, transparent 70%);
-            top: -200px;
-            right: -100px;
-            animation: floatOrb1 25s ease-in-out infinite alternate;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            bottom: -150px;
-            left: -100px;
-            animation: floatOrb2 30s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatOrb1 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-150px, 100px) scale(1.2); }
-        }
-
-        @keyframes floatOrb2 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(150px, -100px) scale(1.1); }
-        }
-
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        #particleCanvas {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* Content Context */
-        .main-content {
+        /* Neon & Glass Effects */
+        .glow-effect { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
+        .glow-strong { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+        .glow-website { box-shadow: 0 0 20px rgba(220, 39, 67, 0.4); }
+        
+        .social-link {
             position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .social-link:hover {
+            transform: translateY(-4px) scale(1.02);
+            filter: brightness(1.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 10;
         }
-
-        /* Logo Pulse */
-        .logo-wrap {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .logo-pulse {
-            position: absolute;
-            inset: 0;
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            animation: logoPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .logo-pulse:nth-child(2) { animation-delay: 1s; }
-        .logo-pulse:nth-child(3) { animation-delay: 2s; }
-
-        @keyframes logoPulse {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-
-        .logo-core {
-            position: absolute;
-            inset: 15px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 40px rgba(0, 229, 191, 0.5);
-            z-index: 2;
-        }
-
-        /* Typography & Badges */
-        .main-title {
-            font-size: clamp(3rem, 10vw, 5.5rem);
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 1.1;
-            background: linear-gradient(to right, #ffffff, #a5b4fc, var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(0, 229, 191, 0.2);
-        }
-
-        .dev-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            padding: 8px 18px;
-            border-radius: 100px;
-            font-size: 13px;
-            color: #c7d2fe;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-        }
-
-        /* Glass Cards */
-        .glass-card {
-            background: rgba(12, 12, 18, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        .social-link .link-arrow {
             opacity: 0.3;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 229, 191, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 229, 191, 0.1);
-        }
-
-        .telegram-glow {
-            background: radial-gradient(circle at center, rgba(0, 229, 191, 0.15), transparent 60%);
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        /* Buttons */
-        .cta-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, var(--accent), #00b396);
-            color: #000;
-            padding: 18px 40px;
-            border-radius: 16px;
-            font-size: 17px;
-            font-weight: 800;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0, 229, 191, 0.3);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: all 0.5s ease;
-            z-index: -1;
-        }
-
-        .cta-btn:hover::before {
-            left: 100%;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(0, 229, 191, 0.5);
-        }
-
-        /* Feature Pills */
-        .feature-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--muted);
+            margin-left: auto;
             transition: all 0.3s ease;
         }
-
-        .feature-pill:hover {
-            border-color: var(--accent);
-            color: #fff;
-            background: rgba(0, 229, 191, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Admin & Contact Links - Enhanced Premium Styling */
-        .admin-card {
-            background: linear-gradient(145deg, rgba(251, 191, 36, 0.08), rgba(0, 0, 0, 0.4));
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 22px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            color: var(--fg);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Individual Social Brand Hover Effects */
-        .contact-link.telegram-link:hover {
-            border-color: rgba(56, 189, 248, 0.6);
-            background: rgba(56, 189, 248, 0.1);
-            color: #38bdf8;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2);
+        .social-link:hover .link-arrow {
+            opacity: 1;
+            transform: scale(1.2) rotate(5deg) translateX(2px) translateY(-2px);
         }
         
-        .contact-link.email-link:hover {
-            border-color: rgba(244, 63, 94, 0.6);
-            background: rgba(244, 63, 94, 0.1);
-            color: #f43f5e;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(244, 63, 94, 0.2);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .contact-link.instagram-link:hover {
-            border-color: rgba(236, 72, 153, 0.6);
-            background: linear-gradient(45deg, rgba(253, 186, 116, 0.1), rgba(236, 72, 153, 0.1));
-            color: #f472b6;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.2);
+        /* Pulse animation */
+        @keyframes subtle-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .animate-subtle-pulse:hover {
+            animation: subtle-pulse 2s infinite;
         }
 
-        /* Progress Bar */
-        .progress-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 100px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
-            border-radius: 100px;
-            width: 0%;
-            animation: fillProgress 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
-            box-shadow: 0 0 10px var(--accent);
-        }
-
-        @keyframes fillProgress {
-            to { width: 55%; }
-        }
-
-        /* Animations */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .arrow-bounce {
-            animation: arrowBounce 1.5s ease-in-out infinite;
-        }
-
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(8px); }
+        /* PDF & Print Specific Fixes */
+        @media print {
+            body, .ppt-slide {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background-color: #080812 !important;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Elements -->
-    <div class="bg-grid"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="noise-overlay"></div>
-    <canvas id="particleCanvas"></canvas>
 
-    <!-- Main Content (Header hata diya gaya hai, padding theek kar di gayi hai) -->
-    <main class="main-content min-h-screen px-4 py-10 md:py-16">
-        <div class="max-w-4xl mx-auto">
+<div class="ppt-slide flex bg-[#080812]">
+    
+    <div class="w-1/2 flex flex-col justify-center pl-16 pr-10 bg-[#080812] relative shrink-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(147, 51, 234, 0.25) 0%, transparent 60%);"></div>
+        <div class="absolute bottom-[-10%] right-0 w-[300px] h-[300px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(8, 145, 178, 0.2) 0%, transparent 60%);"></div>
+        
+        <div class="absolute inset-0 bg-grid opacity-50 pointer-events-none"></div>
+
+        <div class="relative z-10">
+            <h1 class="tech-font font-black mb-4 text-[72px] leading-none tracking-[6px] text-white drop-shadow-lg">
+                PYQERA
+            </h1>
             
-            <!-- Hero Section -->
-            <section class="text-center mb-16 pt-8">
-                <div class="logo-wrap fade-up">
-                    <div class="logo-pulse"></div>
-                    <div class="logo-pulse"></div>
-                    <div class="logo-pulse"></div>
-                    <div class="logo-core">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="dev-badge fade-up mb-8" style="transition-delay: 0.1s;">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                    </svg>
-                    <span>Under Development</span>
-                </div>
-
-                <h1 class="main-title fade-up mb-6" style="transition-delay: 0.15s;">Pyqera</h1>
-                <p class="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto fade-up font-medium" style="transition-delay: 0.2s;">
-                    Your go-to platform for Previous Year Questions and Study Materials
-                </p>
-
-                <div class="max-w-sm mx-auto mt-10 fade-up bg-white/5 p-4 rounded-xl border border-white/10" style="transition-delay: 0.25s;">
-                    <div class="flex justify-between text-sm mb-2 font-mono">
-                        <span class="text-zinc-400">System Status</span>
-                        <span class="text-[var(--accent)] font-bold">55% Ready</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                    <p class="text-xs text-zinc-500 mt-3 font-mono">Building something great for you...</p>
-                </div>
-            </section>
-
-            <!-- Main Telegram CTA (Glass Card) -->
-            <section class="glass-card mb-12 fade-up" style="transition-delay: 0.3s;">
-                <div class="telegram-glow"></div>
-                <div class="text-center mb-8 relative z-10">
-                    <div class="inline-flex items-center gap-2 bg-[#00e5bf]/10 border border-[#00e5bf]/30 rounded-full px-5 py-2.5 mb-6 shadow-[0_0_15px_rgba(0,229,191,0.2)]">
-                        <svg class="w-5 h-5 text-[#00e5bf]" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                        </svg>
-                        <span class="text-sm font-bold text-[#00e5bf] tracking-wide uppercase">Telegram Channel Active</span>
-                    </div>
-                    
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
-                        Get Your PYQs Right Now
-                    </h2>
-                    <p class="text-zinc-400 max-w-lg mx-auto leading-relaxed text-lg">
-                        While we build the website, all Previous Year Questions and study materials are being uploaded on our Telegram channel. Join now and start studying.
-                    </p>
-                </div>
-
-                <!-- Feature Pills -->
-                <div class="flex flex-wrap justify-center gap-4 mb-10 relative z-10">
-                    <div class="feature-pill">
-                        <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span>Free PYQs</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span>Study Notes</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                        <span>Instant Updates</span>
-                    </div>
-                    <div class="feature-pill">
-                        <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                        <span>Community</span>
-                    </div>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="text-center relative z-10">
-                    <a href="https://t.me/pyqera" target="_blank" rel="noopener noreferrer" class="cta-btn group">
-                        <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                        </svg>
-                        <span>Join Telegram Channel</span>
-                        <svg class="w-5 h-5 arrow-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                    <p class="text-sm text-zinc-500 mt-5 font-mono bg-black/30 inline-block px-4 py-1.5 rounded-full border border-white/5">Click to join — it's 100% free</p>
-                </div>
-            </section>
-
-            <!-- Info Cards -->
-            <section class="grid md:grid-cols-2 gap-6 mb-12">
-                <div class="glass-card !p-8 fade-up" style="transition-delay: 0.35s;">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="font-bold text-xl text-white">Why The Wait?</h3>
-                    </div>
-                    <p class="text-base text-zinc-400 leading-relaxed">
-                        Building a quality platform takes time. We're working hard to give you the best experience possible. Meanwhile, grab all PYQs directly from our Telegram channel.
-                    </p>
-                </div>
-
-                <div class="glass-card !p-8 fade-up" style="transition-delay: 0.4s;">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-violet-500/5 flex items-center justify-center border border-violet-500/20 shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-                            <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                            </svg>
-                        </div>
-                        <h3 class="font-bold text-xl text-white">What's Coming?</h3>
-                    </div>
-                    <p class="text-base text-zinc-400 leading-relaxed">
-                        A clean, organized website with all PYQs, notes, and study materials at your fingertips. No more searching everywhere in scattered groups.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Admin Help Card (Social Links yahan aur premium kar diye gaye hain) -->
-            <section class="glass-card admin-card fade-up mb-12" style="transition-delay: 0.45s;">
-                <div class="flex flex-col md:flex-row items-start gap-6">
-                    <!-- Avatar/Icon Space -->
-                    <div class="hidden md:flex w-16 h-16 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-600/10 items-center justify-center border border-amber-500/30 shadow-[0_0_20px_rgba(251,191,36,0.15)] shrink-0">
-                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    </div>
-                    
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="inline-flex items-center gap-1.5 bg-amber-400/15 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-bold text-amber-400 uppercase tracking-widest">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                </svg>
-                                Admin
-                            </span>
-                            <span class="font-bold text-xl text-white">Aryan</span>
-                        </div>
-                        <p class="text-base text-zinc-300 mb-6 leading-relaxed">
-                            I'm building this alone and could use some help. If you know basic HTML and CSS, reach out. Let's build something cool together for everyone.
-                        </p>
-                        
-                        <!-- Premium Social Links -->
-                        <div class="flex flex-wrap gap-4">
-                            <a href="https://t.me/pyqera_admin" target="_blank" rel="noopener noreferrer" class="contact-link telegram-link">
-                                <svg class="w-5 h-5 text-sky-400" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                </svg>
-                                <span>Telegram</span>
-                            </a>
-                            <a href="mailto:pyqera@gmail.com" class="contact-link email-link">
-                                <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                                <span>Email</span>
-                            </a>
-                            <a href="https://instagram.com/pyqera" target="_blank" rel="noopener noreferrer" class="contact-link instagram-link">
-                                <svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                </svg>
-                                <span>Instagram</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="text-center fade-up mt-10" style="transition-delay: 0.5s;">
-                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 mb-4 border border-white/10">
-                    <svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                    </svg>
-                </div>
-                <p class="text-zinc-400 text-base mb-2 font-medium">
-                    Site launching soon. Stay tuned!
-                </p>
-                <p class="text-zinc-600 text-sm font-mono tracking-wider">
-                    Pyqera &copy; 2026 — Made with effort
-                </p>
-            </footer>
-        </div>
-    </main>
-
-    <!-- Scripts -->
-    <script>
-        // ===== Initialize Canvas Particles =====
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        function setupCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        function createParticle() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.max(1, Math.random() * 2.5),
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4,
-                alpha: Math.random() * 0.5 + 0.1
-            };
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 20000));
-            for (let i = 0; i < count; i++) {
-                particles.push(createParticle());
-            }
-        }
-
-        function animate() {
-            if (prefersReducedMotion) return;
+            <div class="w-32 h-[6px] mb-6 rounded-full bg-gradient-to-r from-[#00d4ff] via-[#7c3aed] to-[#f09433] shadow-[0_0_15px_rgba(124,58,237,0.5)]"></div>
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // Mouse repel effect
-                const dx = mouseX - p.x;
-                const dy = mouseY - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+            <p class="text-[22px] font-semibold mb-3 text-[#00d4ff] tracking-wide">
+                Previous Year Questions & Notes
+            </p>
+            
+            <p class="text-base font-light mb-10 text-slate-400">
+                PYQ Notes & Study Materials
+            </p>
+            
+            <div class="mb-8 p-7 rounded-3xl glass-card transition-all duration-300 hover:bg-white/5">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_#4ade80] animate-pulse"></div>
+                    <p class="text-xs font-bold text-slate-400 tracking-[0.2em] uppercase">Created By</p>
+                </div>
                 
-                if (dist < 120 && dist > 0) {
-                    p.x -= (dx / dist) * 1.5;
-                    p.y -= (dy / dist) * 1.5;
-                }
+                <p class="tech-font text-[32px] font-bold text-white mb-2">
+                    ARYAN <span class="text-[#00d4ff]"> [𝖑𝖔𝖈𝖆𝖑𝖍𝖔𝖘𝖙]</span>
+                </p>
+                
+                <p class="text-sm font-light italic mb-6 text-indigo-300">
+                    ✨ Creating a universe where 'Error 404' doesn't exist. 💻
+                </p>
 
-                // Wrap around edges
-                if (p.x < 0) p.x = canvas.width;
-                if (p.x > canvas.width) p.x = 0;
-                if (p.y < 0) p.y = canvas.height;
-                if (p.y > canvas.height) p.y = 0;
-
-                // Draw Particle
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 229, 191, ${p.alpha})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(0, 229, 191, 0.5)';
-                ctx.fill();
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        // ===== Scroll Animations =====
-        function initScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-        }
-
-        // ===== Orb Parallax Effect =====
-        function initParallax() {
-            if (prefersReducedMotion) return;
+                <a href="https://onlyaryan.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-about glow-strong flex items-center justify-between px-5 py-3.5 rounded-xl text-white font-bold text-base border border-white/20 animate-subtle-pulse w-full">
+                    <div class="flex items-center gap-3">
+                        <i class="material-icons text-2xl">person_outline</i>
+                        <span>Discover More About Me</span>
+                    </div>
+                    <i class="material-icons link-arrow text-[20px]">arrow_forward</i>
+                </a>
+            </div>
             
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
+            <div class="p-6 rounded-3xl glass-card border-l-4 border-l-purple-500">
+                <i class="material-icons mb-2 text-[28px] text-purple-400 opacity-80">format_quote</i>
+                <p class="text-[15px] font-light leading-relaxed text-slate-300 italic">
+                    "Innovation distinguishes between a leader and a follower. The future belongs to those who believe in the beauty of their dreams."
+                </p>
+            </div>
+        </div>
+    </div>
 
-                const x = (e.clientX / window.innerWidth - 0.5) * 60;
-                const y = (e.clientY / window.innerHeight - 0.5) * 60;
-
-                document.querySelectorAll('.orb').forEach((orb, i) => {
-                    const factor = i === 0 ? 1 : -0.8;
-                    orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
-                });
-            });
-        }
-
-        // ===== Boot Up =====
-        function init() {
-            setupCanvas();
-            initParticles();
+    <div class="w-1/2 flex flex-col justify-center py-8 pr-16 pl-8 bg-[#0a0a14] border-l border-white/5 relative z-10">
+        <div class="space-y-3">
             
-            if (!prefersReducedMotion) {
-                animate();
-            }
+            <a href="https://www.youtube.com/@pyqera?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="social-link gradient-youtube glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-youtube text-[26px]"></i>
+                <span class="text-sm flex-grow">Subscribe to My YouTube Channel</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
             
-            initParallax();
-            initScrollAnimations();
-        }
+            <a href="https://t.me/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-telegram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-telegram text-[26px]"></i>
+                <span class="text-sm flex-grow">Join My Telegram Family</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://whatsapp.com/channel/0029VbAYK3T11ulJTKOhx53G" target="_blank" rel="noopener noreferrer" class="social-link gradient-whatsapp glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-whatsapp text-[26px]"></i>
+                <span class="text-sm flex-grow">Follow me on WhatsApp for updates.</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://www.instagram.com/pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-instagram glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-instagram text-[26px]"></i>
+                <span class="text-sm flex-grow">Follow on Instagram</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://discord.gg/at46xXhUw" target="_blank" rel="noopener noreferrer" class="social-link gradient-discord glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-discord text-[24px]"></i>
+                <span class="text-sm flex-grow">Join Discord Community</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://www.facebook.com/groups/1278899844307654/?ref=share&mibextid=NSMWBT" target="_blank" rel="noopener noreferrer" class="social-link gradient-facebook glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-facebook text-[26px]"></i>
+                <span class="text-sm flex-grow">Connect on Facebook</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://twitter.com/intent/follow?screen_name=pyqera" target="_blank" rel="noopener noreferrer" class="social-link gradient-x glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-x-twitter text-[24px]"></i>
+                <span class="text-sm flex-grow">Follow on X (Twitter)</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
 
-        window.addEventListener('resize', () => {
-            setupCanvas();
-            initParticles();
-        });
+            <a href="https://pyqera.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link gradient-website glow-website flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-bold border border-white/20 animate-subtle-pulse">
+                <i class="material-icons text-[26px]">language</i>
+                <span class="text-sm flex-grow">Visit PYQERA Website</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+            <a href="https://ghbtns.com/github-btn.html?user=Aryan0127&type=follow&count=true&size=large" target="_blank" rel="noopener noreferrer" class="social-link gradient-github glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl text-white font-semibold">
+                <i class="fa-brands fa-github text-[24px]"></i>
+                <span class="text-sm flex-grow">Follow me on GitHub</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    </script>
+            <a href="https://justpaste.it/kbf03" target="_blank" rel="noopener noreferrer" class="social-link gradient-buymeacoffee glow-effect flex items-center gap-4 px-5 py-3 rounded-2xl font-bold text-black mt-1">
+                <i class="fa-solid fa-mug-hot text-[24px]"></i>
+                <span class="text-[15px] flex-grow text-center">Buy Me a Coffee</span>
+                <i class="material-icons link-arrow text-[20px]">arrow_outward</i>
+            </a>
+            
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
